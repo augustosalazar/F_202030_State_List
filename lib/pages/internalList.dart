@@ -21,7 +21,10 @@ class _InternalListState extends State<InternalList> {
   }
 
   _addTodo() {
-    final todo = Todo(body: "ssss", title: "tttt", completed: 0);
+    final todo = Todo(
+        body: 'Body ' + this.todos.length.toString(),
+        title: 'Item ' + this.todos.length.toString(),
+        completed: 0);
 
     if (todo != null) {
       setState(() {
@@ -50,8 +53,13 @@ class _InternalListState extends State<InternalList> {
         contentPadding: EdgeInsets.all(10.0),
         title: _itemTitle(element),
         subtitle: _itemSubTitle(element),
+        onTap: () => _onTap(context, element, posicion),
       ),
     );
+  }
+
+  void _onTap(BuildContext context, Todo location, int posicion) {
+    print('Tap on ' + 'title: ${location.title} posicion ' + '$posicion');
   }
 
   Widget _itemTitle(Todo item) {
