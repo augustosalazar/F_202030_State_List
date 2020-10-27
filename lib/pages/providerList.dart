@@ -1,53 +1,52 @@
+import 'package:F_202030_ListWithState/model/providerStateHandler.dart';
 import 'package:F_202030_ListWithState/model/todo.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class InternalList extends StatefulWidget {
-  @override
-  _InternalListState createState() => _InternalListState();
-}
-
-class _InternalListState extends State<InternalList> {
-  List<Todo> todos = [];
+class ProviderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Internal Data"),
+        title: Text("Provider Data"),
       ),
-      body: _list(),
-      floatingActionButton: new FloatingActionButton(
-          onPressed: _addTodo, tooltip: 'Add task', child: new Icon(Icons.add)),
+      body: Consumer<ProviderListState>(builder: (context, model, child) {
+        return _list(context, model);
+      }),
+      floatingActionButton:
+          Consumer<ProviderListState>(builder: (context, model, child) {
+        return FloatingActionButton(
+            onPressed: () => _addTodo(model),
+            tooltip: 'Add task',
+            child: new Icon(Icons.add));
+      }),
     );
   }
 
-  _addTodo() {
-    final todo = Todo(
-        body: 'Body ' + this.todos.length.toString(),
-        title: 'Item ' + this.todos.length.toString(),
+  _addTodo(ProviderListState model) async {
+    Todo todo = Todo(
+        body: 'the Body ' + model.items.length.toString(),
+        title: 'the Item ',
         completed: 0);
 
     if (todo != null) {
-      setState(() {
-        this.todos.add(todo);
-      });
+      model.addData(todo);
     }
   }
 
-  Widget _list() {
+  Widget _list(BuildContext context, ProviderListState model) {
+    var model = context.watch<ProviderListState>();
+    List<Todo> todos = model.items;
     return ListView.builder(
       itemCount: todos.length,
       itemBuilder: (context, posicion) {
         var element = todos[posicion];
-        return _simpleItem(element, posicion);
+        return _item(context, element, posicion);
       },
     );
   }
 
-  Widget _simpleItem(Todo element, int posicion) {
-    return Text(element.body);
-  }
-
-  Widget _item(Todo element, int posicion) {
+  Widget _item(BuildContext context, Todo element, int posicion) {
     return Card(
       margin: EdgeInsets.all(4.0),
       color: element.completed == 1

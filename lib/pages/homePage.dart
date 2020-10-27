@@ -1,3 +1,4 @@
+import 'package:F_202030_ListWithState/pages/providerList.dart';
 import 'package:flutter/material.dart';
 
 import 'internalList.dart';
@@ -10,6 +11,7 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           _row(context, "Lista con datos internos", InternalList()),
+          _row(context, "Lista con datos con Provider", ProviderList()),
         ],
       ),
     ]);
